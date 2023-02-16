@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
@@ -12,6 +13,8 @@ class Invoice extends Model
     protected $table = 'invoices';
 
     protected $fillable = [
+        'invoiceId',
+        'invoice_number',
         'createdAt',
         'paymentDue',
         'description',
@@ -27,5 +30,11 @@ class Invoice extends Model
         'clientCity',
         'clientPostCode',
         'clientCountry',
+        'item',
     ];
+
+    public function item(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
 }

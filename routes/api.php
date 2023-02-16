@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\InvoiceController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\MarkAsPaidController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('invoice', InvoiceController::class);
 
+Route::patch('invoice/mark/{id}', [MarkAsPaidController::class, 'update']);
+
+Route::apiResource('items', ItemsController::class);

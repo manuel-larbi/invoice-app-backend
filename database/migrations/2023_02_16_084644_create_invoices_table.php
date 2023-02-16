@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Str;
 return new class extends Migration
 {
     /**
@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime('createdAt');
-            $table->dateTime('paymentDue');
+            $table->string('invoiceId');
+            $table->date('createdAt');
+            $table->date('paymentDue');
             $table->string('description');
             $table->integer('paymentTerms');
             $table->string('clientName');
             $table->string('clientEmail');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->string('senderStreet');
             $table->string('senderCity');
             $table->string('senderPostCode');
@@ -28,10 +29,11 @@ return new class extends Migration
             $table->string('clientCity');
             $table->string('clientPostCode');
             $table->string('clientCountry');
-            // $table->json('items');
+            $table->json('item');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
