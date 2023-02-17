@@ -8,6 +8,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
+use Illuminate\Support\Js;
 use PHPUnit\Framework\MockObject\Invocation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -23,8 +24,13 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::query();
 
-        if($request->has('status') && $request->status != ""){
-            $invoice->where('status', $request->status);
+        if($request->has('status')&& $request->status != ''){
+            $status = json_encode($request->status);
+
+            // dd($status);
+
+            $invoice->where('status', json_decode($status))->get();
+            // dd($invoice);
         }
 
         return InvoiceResource::collection($invoice->paginate(2));
@@ -39,12 +45,14 @@ class InvoiceController extends Controller
         $request->merge([
             'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
         ]);
-        $invoice = Invoice::create($request->except('items'));
+        $invoice = Invoice::create($request->except(['items','total']));
 
         foreach($request->items as $item){
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
         }
+
+        $invoice->total = collect($invoice->items)->sum('total');
 
         return new InvoiceResource($invoice);
     }
@@ -74,8 +82,7 @@ class InvoiceController extends Controller
         return $invoice->delete();
     }
 
-    public function status(Request $request, $id)
-    {
+    public function status(Request $request, $id) {
        return Invoice::find($id)->update([ 'status' => $request->old('status', 'paid') ]);
     }
 

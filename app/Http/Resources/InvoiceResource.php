@@ -33,7 +33,8 @@ class InvoiceResource extends JsonResource
             'clientCity' => $this->clientCity,
             'clientPostCode' => $this->clientPostCode,
             'clientCountry' => $this->clientCountry,
-            'items' => $this->items
+            'items' => $this->items,
+            'total' => $this->total
             // 'item' => json_decode($this->item)
         ];
     }
