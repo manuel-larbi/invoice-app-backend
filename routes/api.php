@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('invoice', InvoiceController::class);
 
-Route::patch('invoice/mark/{id}', [MarkAsPaidController::class, 'update']);
+Route::patch('invoice/mark/{id}', [InvoiceController::class, 'status']);
 
 Route::apiResource('items', ItemsController::class);

@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations.in
      */
     public function up(): void
     {
@@ -29,11 +29,10 @@ return new class extends Migration
             $table->string('clientCity');
             $table->string('clientPostCode');
             $table->string('clientCountry');
-            $table->json('item');
+            // $table->json('item');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
