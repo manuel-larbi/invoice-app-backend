@@ -24,13 +24,12 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::query();
 
-        if($request->has('status')&& $request->status != ''){
-            $status = json_encode($request->status);
+        if($request->has('status')){
+            $status = json_decode($request->status);
 
-            // dd($status);
-
-            $invoice->where('status', json_decode($status))->get();
-            // dd($invoice);
+            foreach ($status as $stat) {
+                $invoice->where('status', $stat);
+            }
         }
 
         return InvoiceResource::collection($invoice->paginate(2));
@@ -42,9 +41,11 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $idGen = Str::random(2).mt_rand(1000,9999);
+
         $request->merge([
             'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
         ]);
+
         $invoice = Invoice::create($request->except(['items','total']));
 
         foreach($request->items as $item){
@@ -52,7 +53,6 @@ class InvoiceController extends Controller
             $invoice->items()->create($item);
         }
 
-        $invoice->total = collect($invoice->items)->sum('total');
 
         return new InvoiceResource($invoice);
     }

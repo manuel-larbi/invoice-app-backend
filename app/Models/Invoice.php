@@ -12,6 +12,10 @@ class Invoice extends Model
 
     protected $table = 'invoices';
 
+    protected $append = [
+        'total'
+    ];
+
     protected $fillable = [
         'invoiceId',
         'invoice_number',
@@ -30,11 +34,14 @@ class Invoice extends Model
         'clientCity',
         'clientPostCode',
         'clientCountry',
-        // 'item',
     ];
 
     public function items(): HasMany
     {
         return $this->hasMany(Item::class);
+    }
+
+    public function getTotalAttribute() {
+        return $this->items->sum('total');
     }
 }
