@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->integer('quantity');
-            $table->float('price');
-            $table->float('total');
+            $table->string('name')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->float('price')->nullable();
+            $table->float('total')->nullable();
             $table->unsignedInteger('invoice_id');
             $table->foreign('invoice_id')->references('id')->on('invoices');
             $table->timestamps();

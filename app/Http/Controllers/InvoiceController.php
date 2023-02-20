@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceRequest;
 use App\Http\Requests\SaveAsDraftRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
@@ -40,15 +41,16 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(InvoiceRequest $request)
     {
         // Generate a random ID, add items and save invoice data
+
         $idGen = Str::random(2).mt_rand(1000,9999);
         $request->merge([
             'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
         ]);
-        $invoice = Invoice::create($request->except('items'));
-
+        $invoice = Invoice::create($request->except('items'));;
+        // Add items to invoice
         foreach($request->items as $item){
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
@@ -58,7 +60,7 @@ class InvoiceController extends Controller
     }
 
 
-    public function saveAsDraft(SaveAsDraftRequest $request)
+    public function saveAsDraft(Request $request)
     {
         // Generate a random ID, add items and save invoice data
         $idGen = Str::random(2).mt_rand(1000,9999);

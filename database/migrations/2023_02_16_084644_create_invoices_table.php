@@ -13,21 +13,21 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('invoiceId');
-            $table->date('paymentDue');
-            $table->string('description');
-            $table->integer('paymentTerms');
-            $table->string('clientName');
-            $table->string('clientEmail');
+            $table->string('invoiceId')->nullable();
+            $table->date('paymentDue')->nullable();
+            $table->string('description')->nullable();
+            $table->integer('paymentTerms')->nullable();
+            $table->string('clientName')->nullable();
+            $table->string('clientEmail')->nullable();
             $table->string('status')->default('pending');
-            $table->string('senderStreet');
-            $table->string('senderCity');
-            $table->string('senderPostCode');
-            $table->string('senderCountry');
-            $table->string('clientStreet');
-            $table->string('clientCity');
-            $table->string('clientPostCode');
-            $table->string('clientCountry');
+            $table->string('senderStreet')->nullable();
+            $table->string('senderCity')->nullable();
+            $table->string('senderPostCode')->nullable();
+            $table->string('senderCountry')->nullable();
+            $table->string('clientStreet')->nullable();
+            $table->string('clientCity')->nullable();
+            $table->string('clientPostCode')->nullable();
+            $table->string('clientCountry')->nullable();
             $table->timestamps();
         });
     }
