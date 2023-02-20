@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\MarkAsPaidController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->group(function(){
+    Route::apiResource('invoice', InvoiceController::class);
+    Route::apiResource('items', ItemsController::class);
+
+    Route::prefix('invoice')->controller(InvoiceController::class)->group(function(){
+        Route::patch('/mark/{id}', 'status');
+        Route::post('/forms/draft', 'saveAsDraft');
+    });
 });
