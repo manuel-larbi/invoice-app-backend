@@ -18,7 +18,7 @@ class Item extends Model
         'total'
     ];
 
-    public function item(): BelongsTo
+    public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
     }

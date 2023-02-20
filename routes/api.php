@@ -16,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('invoice', InvoiceController::class);
+Route::prefix('v1')->group(function(){
+    Route::apiResource('invoice', InvoiceController::class);
+    Route::apiResource('items', ItemsController::class);
 
-Route::patch('invoice/mark/{id}', [InvoiceController::class, 'status']);
-
-Route::apiResource('items', ItemsController::class);
+    Route::prefix('invoice')->controller(InvoiceController::class)->group(function(){
+        Route::patch('/mark/{id}', 'status');
+        Route::post('/forms/draft', 'saveAsDraft');
+    });
+});

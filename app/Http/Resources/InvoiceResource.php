@@ -18,7 +18,7 @@ class InvoiceResource extends JsonResource
     {
         return [
             'id' => $this->invoiceId,
-            'createdAt' => $this->createdAt,
+            'createdAt' => date('Y-m-d',strtotime($this->created_at)),
             'paymentDue' => $this->paymentDue,
             'description' => $this->description,
             'paymentTerms' => $this->paymentTerms,
@@ -35,7 +35,6 @@ class InvoiceResource extends JsonResource
             'clientCountry' => $this->clientCountry,
             'items' => $this->items,
             'total' => $this->total
-            // 'item' => json_decode($this->item)
         ];
     }
 }

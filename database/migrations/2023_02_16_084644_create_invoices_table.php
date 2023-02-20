@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('invoiceId');
-            $table->date('createdAt');
             $table->date('paymentDue');
             $table->string('description');
             $table->integer('paymentTerms');
@@ -29,7 +28,6 @@ return new class extends Migration
             $table->string('clientCity');
             $table->string('clientPostCode');
             $table->string('clientCountry');
-            // $table->json('item');
             $table->timestamps();
         });
     }

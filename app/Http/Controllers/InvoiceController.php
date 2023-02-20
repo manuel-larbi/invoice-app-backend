@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveAsDraftRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use App\Models\Item;
@@ -24,7 +25,8 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::query();
 
-        if($request->has('status')){
+        // filter invoices by status
+        if($request->has('status') && $request->status != ""){
             $status = json_decode($request->status);
 
             foreach ($status as $stat) {
@@ -40,19 +42,36 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        // Generate a random ID, add items and save invoice data
         $idGen = Str::random(2).mt_rand(1000,9999);
-
         $request->merge([
             'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
         ]);
-
-        $invoice = Invoice::create($request->except(['items','total']));
+        $invoice = Invoice::create($request->except('items'));
 
         foreach($request->items as $item){
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
         }
 
+        return new InvoiceResource($invoice);
+    }
+
+
+    public function saveAsDraft(SaveAsDraftRequest $request)
+    {
+        // Generate a random ID, add items and save invoice data
+        $idGen = Str::random(2).mt_rand(1000,9999);
+        $request->merge([
+            'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
+            'status' => $request->old('status', 'draft')
+        ]);
+        $invoice = Invoice::create($request->except('items'));
+
+        foreach($request->items as $item){
+            $item['total'] = $item['quantity'] * $item['price'];
+            $invoice->items()->create($item);
+        }
 
         return new InvoiceResource($invoice);
     }
@@ -71,6 +90,7 @@ class InvoiceController extends Controller
     public function update(Request $request,  Invoice $invoice)
     {
         $invoice->update($request->all());
+
         return new InvoiceResource($invoice);
     }
 
@@ -82,7 +102,8 @@ class InvoiceController extends Controller
         return $invoice->delete();
     }
 
-    public function status(Request $request, $id) {
+    public function status(Request $request, $id)
+    {
        return Invoice::find($id)->update([ 'status' => $request->old('status', 'paid') ]);
     }
 
