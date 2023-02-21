@@ -35,7 +35,7 @@ class InvoiceController extends Controller
             }
         }
 
-        return InvoiceResource::collection($invoice->paginate(2));
+        return InvoiceResource::collection($invoice->paginate(7));
     }
 
     /**
