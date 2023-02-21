@@ -18,7 +18,11 @@ return new class extends Migration
             $table->float('price')->nullable();
             $table->float('total')->nullable();
             $table->unsignedInteger('invoice_id');
-            $table->foreign('invoice_id')->references('id')->on('invoices');
+            $table->foreign('invoice_id')
+                ->references('id')
+                ->on('invoices')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
