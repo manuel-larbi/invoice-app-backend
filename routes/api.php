@@ -21,7 +21,8 @@ Route::prefix('v1')->group(function(){
     Route::apiResource('items', ItemsController::class);
 
     Route::prefix('invoice')->controller(InvoiceController::class)->group(function(){
-        Route::patch('/mark/{id}', 'status');
+        Route::patch('/mark/{invoiceId}', 'status');
         Route::post('/forms/draft', 'saveAsDraft');
+        Route::post('/invoice/{invoiceId}', 'destroy');
     });
 });

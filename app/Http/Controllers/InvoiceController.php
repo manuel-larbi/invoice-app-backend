@@ -3,19 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceRequest;
-use App\Http\Requests\SaveAsDraftRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
-use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Http\Response;
-use Illuminate\Support\Js;
-use PHPUnit\Framework\MockObject\Invocation;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
-
-use function GuzzleHttp\Promise\all;
 
 class InvoiceController extends Controller
 {
@@ -99,14 +90,15 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Invoice $invoice)
+    public function destroy($invoiceId)
     {
-        return $invoice->delete();
+       return Invoice::where('invoiceId', $invoiceId)->first()->delete();
     }
 
-    public function status(Request $request, $id)
+    public function status(Request $request, $invoiceId)
     {
-       return Invoice::find($id)->update([ 'status' => $request->old('status', 'paid') ]);
+        return Invoice::where('invoiceId', $invoiceId)->first()
+            ->update([ 'status' => $request->old('status', 'paid') ]);
     }
 
 }
