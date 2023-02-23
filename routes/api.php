@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ItemsController;
-use App\Http\Controllers\MarkAsPaidController;
 use Illuminate\Support\Facades\Route;
 
 /*
