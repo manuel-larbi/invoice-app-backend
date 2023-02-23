@@ -21,7 +21,6 @@ class InvoiceResource extends JsonResource
             'createdAt' => date('Y-m-d',strtotime($this->created_at)),
             'paymentDue' => $this->paymentDue,
             'description' => $this->description,
-            'paymentTerms' => $this->paymentTerms,
             'clientName' => $this->clientName,
             'clientEmail' => $this->clientEmail,
             'status' => $this->status,

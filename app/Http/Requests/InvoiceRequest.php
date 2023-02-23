@@ -24,7 +24,6 @@ class InvoiceRequest extends FormRequest
         return [
             'paymentDue' => 'required',
             'description' => 'required',
-            'paymentTerms' => 'required',
             'clientName' => 'required',
             'clientEmail' => 'required',
             'senderStreet' => 'required',
