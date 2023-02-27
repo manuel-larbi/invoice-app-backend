@@ -82,9 +82,14 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $invoiceId)
     {
+        $request->merge([
+            'status' => $request->old('status', 'pending'),
+        ]);
+
         Invoice::where('invoiceId', $invoiceId)->update(
             $request->except('items')
         );
+
         $invoice = Invoice::where('invoiceId', $invoiceId)->first();
 
 
@@ -92,6 +97,8 @@ class InvoiceController extends Controller
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
         }
+
+        return new InvoiceResource($invoice);
     }
 
     /**
