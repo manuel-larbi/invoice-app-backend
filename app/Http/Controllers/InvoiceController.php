@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -15,10 +16,10 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $invoice = Invoice::query()->orderBy('id', 'desc');
+        $invoice = Invoice::query();
 
         // filter invoices by status
-        if($request->has('status') && $request->status != ""){
+        if ($request->has('status') && $request->status != '') {
             $status = json_decode($request->status);
 
             foreach ($status as $stat) {
@@ -36,13 +37,13 @@ class InvoiceController extends Controller
     {
         // Generate a random ID, add items and save invoice data
 
-        $idGen = Str::random(2).mt_rand(1000,9999);
+        $idGen = Str::random(2) . mt_rand(1000, 9999);
         $request->merge([
-            'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
+            'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
         ]);
-        $invoice = Invoice::create($request->except('items'));;
+        $invoice = Invoice::create($request->except('items'));
         // Add items to invoice
-        foreach($request->items as $item){
+        foreach ($request->items as $item) {
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
         }
@@ -50,18 +51,17 @@ class InvoiceController extends Controller
         return new InvoiceResource($invoice);
     }
 
-
     public function saveAsDraft(Request $request)
     {
         // Generate a random ID, add items and save invoice data
-        $idGen = Str::random(2).mt_rand(1000,9999);
+        $idGen = Str::random(2) . mt_rand(1000, 9999);
         $request->merge([
-            'invoiceId' => $request->old('invoiceId',strtoupper($idGen)),
-            'status' => $request->old('status', 'draft')
+            'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
+            'status' => $request->old('status', 'draft'),
         ]);
         $invoice = Invoice::create($request->except('items'));
 
-        foreach($request->items as $item){
+        foreach ($request->items as $item) {
             $item['total'] = $item['quantity'] * $item['price'];
             $invoice->items()->create($item);
         }
@@ -80,11 +80,18 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  Invoice $invoice)
+    public function update(Request $request, $invoiceId)
     {
-        $invoice->update($request->all());
+        Invoice::where('invoiceId', $invoiceId)->update(
+            $request->except('items')
+        );
+        $invoice = Invoice::where('invoiceId', $invoiceId)->first();
 
-        return new InvoiceResource($invoice);
+
+        foreach ($request->items as $item) {
+            $item['total'] = $item['quantity'] * $item['price'];
+            $invoice->items()->create($item);
+        }
     }
 
     /**
@@ -92,13 +99,15 @@ class InvoiceController extends Controller
      */
     public function destroy($invoiceId)
     {
-       return Invoice::where('invoiceId', $invoiceId)->first()->delete();
+        return Invoice::where('invoiceId', $invoiceId)
+            ->first()
+            ->delete();
     }
 
     public function status(Request $request, $invoiceId)
     {
-        return Invoice::where('invoiceId', $invoiceId)->first()
-            ->update([ 'status' => $request->old('status', 'paid') ]);
+        return Invoice::where('invoiceId', $invoiceId)
+            ->first()
+            ->update(['status' => $request->old('status', 'paid')]);
     }
-
 }
