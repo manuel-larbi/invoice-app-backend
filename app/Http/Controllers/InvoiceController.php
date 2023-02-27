@@ -87,11 +87,10 @@ class InvoiceController extends Controller
         ]);
 
         Invoice::where('invoiceId', $invoiceId)->update(
-            $request->except('items')
+            $request->except(['items', 'invoiceId'])
         );
 
         $invoice = Invoice::where('invoiceId', $invoiceId)->first();
-
 
         foreach ($request->items as $item) {
             $item['total'] = $item['quantity'] * $item['price'];
