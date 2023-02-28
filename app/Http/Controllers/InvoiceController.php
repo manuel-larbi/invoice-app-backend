@@ -36,12 +36,14 @@ class InvoiceController extends Controller
     public function store(InvoiceRequest $request)
     {
         // Generate a random ID, add items and save invoice data
+        $idGen = Str::random(2);
+        while (ctype_alpha($idGen)) {
+            $string = Str::random(2)  . mt_rand(1000, 9999);
+        }
 
-        $idGen = Str::random(2) . mt_rand(1000, 9999);
         $request->merge([
-            'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
+            'invoiceId' => $request->old('invoiceId', strtoupper($string)),
             'status' => $request->old('status', 'pending'),
-
         ]);
         $invoice = Invoice::create($request->except('items'));
         // Add items to invoice
@@ -96,11 +98,14 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::where('invoiceId', $invoiceId)->first();
 
+        $invoice->items()->delete();
+
         try {
             foreach ($request->items as $item) {
                 $item['total'] = round(($item['quantity'] * $item['price']), 2);
-                $invoice->items()->update($item);
+                $invoice->items()->create($item);
             }
+            return new InvoiceResource($invoice);
         } catch (\Throwable $th) {
             return response()->json([
                     new InvoiceResource($invoice)
@@ -124,4 +129,6 @@ class InvoiceController extends Controller
             ->first()
             ->update(['status' => $request->old('status', 'paid')]);
     }
+
+
 }
