@@ -40,6 +40,8 @@ class InvoiceController extends Controller
         $idGen = Str::random(2) . mt_rand(1000, 9999);
         $request->merge([
             'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
+            'status' => $request->old('status', 'pending'),
+
         ]);
         $invoice = Invoice::create($request->except('items'));
         // Add items to invoice
@@ -82,22 +84,28 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $invoiceId)
     {
+        // dd($invoiceId);
         $request->merge([
             'status' => $request->old('status', 'pending'),
+            'invoiceId' => $request->old('invoiceId',$invoiceId),
         ]);
 
         Invoice::where('invoiceId', $invoiceId)->update(
-            $request->except(['items', 'invoiceId'])
+            $request->except(['items', 'invoiceId',])
         );
 
         $invoice = Invoice::where('invoiceId', $invoiceId)->first();
 
-        foreach ($request->items as $item) {
-            $item['total'] = $item['quantity'] * $item['price'];
-            $invoice->items()->create($item);
+        try {
+            foreach ($request->items as $item) {
+                $item['total'] = round(($item['quantity'] * $item['price']), 2);
+                $invoice->items()->update($item);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                    new InvoiceResource($invoice)
+            ],200);
         }
-
-        return new InvoiceResource($invoice);
     }
 
     /**

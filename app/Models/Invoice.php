@@ -20,7 +20,6 @@ class Invoice extends Model
         'invoiceId',
         'paymentDue',
         'description',
-        'paymentTerms',
         'clientName',
         'clientEmail',
         'status',
@@ -40,6 +39,6 @@ class Invoice extends Model
     }
 
     public function getTotalAttribute() {
-        return $this->items->sum('total');
+        return number_format(($this->items->sum('total')), 2,'.','');
     }
 }
