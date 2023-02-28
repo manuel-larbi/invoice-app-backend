@@ -96,6 +96,8 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::where('invoiceId', $invoiceId)->first();
 
+        $invoice->items()->delete();
+
         try {
             foreach ($request->items as $item) {
                 $item['total'] = round(($item['quantity'] * $item['price']), 2);
@@ -125,4 +127,5 @@ class InvoiceController extends Controller
             ->first()
             ->update(['status' => $request->old('status', 'paid')]);
     }
+    
 }
