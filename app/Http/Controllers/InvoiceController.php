@@ -99,8 +99,9 @@ class InvoiceController extends Controller
         try {
             foreach ($request->items as $item) {
                 $item['total'] = round(($item['quantity'] * $item['price']), 2);
-                $invoice->items()->update($item);
+                $invoice->items()->create($item);
             }
+            return new InvoiceResource($invoice);
         } catch (\Throwable $th) {
             return response()->json([
                     new InvoiceResource($invoice)
