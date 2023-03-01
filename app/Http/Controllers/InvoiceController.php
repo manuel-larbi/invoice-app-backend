@@ -84,9 +84,10 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show($invoiceId)
     {
-        return new InvoiceResource($invoice);
+        $invoiceDetails = Invoice::where('invoiceId',$invoiceId)->first();
+        return new InvoiceResource($invoiceDetails);
     }
 
     /**
