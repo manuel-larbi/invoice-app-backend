@@ -22,6 +22,7 @@ Route::prefix('v1')->group(function(){
     Route::prefix('invoice')->controller(InvoiceController::class)->group(function(){
         Route::patch('/mark/{invoiceId}', 'status');
         Route::post('/forms/draft', 'saveAsDraft');
+        Route::get('/invoice/{invoiceId}', 'show');
         Route::patch('/invoice/{invoiceId}', 'update');
         Route::post('/invoice/{invoiceId}', 'destroy');
     });

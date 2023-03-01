@@ -36,13 +36,9 @@ class InvoiceController extends Controller
     public function store(InvoiceRequest $request)
     {
         // Generate a random ID, add items and save invoice data
-        $idGen = Str::random(2);
-        while (ctype_alpha($idGen)) {
-            $string = Str::random(2)  . mt_rand(1000, 9999);
-        }
 
         $request->merge([
-            'invoiceId' => $request->old('invoiceId', strtoupper($string)),
+            'invoiceId' => $request->old('invoiceId', strtoupper($this->idGenerate())),
             'status' => $request->old('status', 'pending'),
         ]);
         $invoice = Invoice::create($request->except('items'));
@@ -58,9 +54,9 @@ class InvoiceController extends Controller
     public function saveAsDraft(Request $request)
     {
         // Generate a random ID, add items and save invoice data
-        $idGen = Str::random(2) . mt_rand(1000, 9999);
+
         $request->merge([
-            'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
+            'invoiceId' => $request->old('invoiceId', strtoupper($this->idGenerate())),
             'status' => $request->old('status', 'draft'),
         ]);
         $invoice = Invoice::create($request->except('items'));
@@ -76,9 +72,10 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show($invoiceId)
     {
-        return new InvoiceResource($invoice);
+        $invoiceDetails = Invoice::where('invoiceId',$invoiceId)->first();
+        return new InvoiceResource($invoiceDetails);
     }
 
     /**
@@ -86,7 +83,6 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $invoiceId)
     {
-        // dd($invoiceId);
         $request->merge([
             'status' => $request->old('status', 'pending'),
             'invoiceId' => $request->old('invoiceId',$invoiceId),
@@ -130,5 +126,14 @@ class InvoiceController extends Controller
             ->update(['status' => $request->old('status', 'paid')]);
     }
 
-
+    public function idGenerate(){
+        $length = 2;
+        $result = '';
+        // Generate a random string of alphabets
+        for ($i = 0; $i < $length; $i++) {
+            $code = rand(65, 90) > rand(0, 1) ? rand(65, 90) : rand(97, 122);
+            $result .= chr($code);
+        }
+        return $result.mt_rand(1000, 9999);
+    }
 }
