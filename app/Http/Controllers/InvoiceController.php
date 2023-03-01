@@ -36,20 +36,9 @@ class InvoiceController extends Controller
     public function store(InvoiceRequest $request)
     {
         // Generate a random ID, add items and save invoice data
-        function idGenerate(){
-            $length = 2;
-            $result = '';
-            // Generate a random string of alphabets
-            for ($i = 0; $i < $length; $i++) {
-                $code = rand(65, 90) > rand(0, 1) ? rand(65, 90) : rand(97, 122);
-                $result .= chr($code);
-            }
-            return $result.mt_rand(1000, 9999);
-        }
-
 
         $request->merge([
-            'invoiceId' => $request->old('invoiceId', strtoupper(idGenerate())),
+            'invoiceId' => $request->old('invoiceId', strtoupper($this->idGenerate())),
             'status' => $request->old('status', 'pending'),
         ]);
         $invoice = Invoice::create($request->except('items'));
@@ -65,10 +54,9 @@ class InvoiceController extends Controller
     public function saveAsDraft(Request $request)
     {
         // Generate a random ID, add items and save invoice data
-        $idGen = ctype_alpha(Str::random(2)) . mt_rand(1000, 9999);
 
         $request->merge([
-            'invoiceId' => $request->old('invoiceId', strtoupper($idGen)),
+            'invoiceId' => $request->old('invoiceId', strtoupper($this->idGenerate())),
             'status' => $request->old('status', 'draft'),
         ]);
         $invoice = Invoice::create($request->except('items'));
@@ -138,4 +126,14 @@ class InvoiceController extends Controller
             ->update(['status' => $request->old('status', 'paid')]);
     }
 
+    public function idGenerate(){
+        $length = 2;
+        $result = '';
+        // Generate a random string of alphabets
+        for ($i = 0; $i < $length; $i++) {
+            $code = rand(65, 90) > rand(0, 1) ? rand(65, 90) : rand(97, 122);
+            $result .= chr($code);
+        }
+        return $result.mt_rand(1000, 9999);
+    }
 }
