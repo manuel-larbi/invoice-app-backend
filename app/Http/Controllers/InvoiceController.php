@@ -16,7 +16,7 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $invoice = Invoice::query();
+        $invoice = Invoice::query()->latest();
 
         // filter invoices by status
         if ($request->has('status') && $request->status != '') {
