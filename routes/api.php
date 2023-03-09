@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ItemsController;
 use Illuminate\Support\Facades\Route;
@@ -22,8 +23,11 @@ Route::prefix('v1')->group(function(){
     Route::prefix('invoice')->controller(InvoiceController::class)->group(function(){
         Route::patch('/mark/{invoiceId}', 'status');
         Route::post('/forms/draft', 'saveAsDraft');
-        Route::get('/invoice/{invoiceId}', 'show');
-        Route::patch('/invoice/{invoiceId}', 'update');
-        Route::post('/invoice/{invoiceId}', 'destroy');
+        Route::get('/{invoiceId}', 'show');
+        Route::patch('/{invoiceId}', 'update');
+        Route::post('/{invoiceId}', 'destroy');
     });
+
+
+    Route::get('/invoice/{invoiceId}/send-mail', [EmailController::class, 'sendEmail']);
 });
