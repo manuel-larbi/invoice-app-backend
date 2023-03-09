@@ -1,18 +1,19 @@
 <div class="header">
     <div class="nav">
-        <p>INVOICE</p>
+        <p style="font-family: monospace">INVOICE</p>
         <div class="inv-id">
             <div>
-                <p style="font-family: Arial, Helvetica, sans-serif;">INVOICE #</p>
-                <p>{{ $id }}</p>
+                <p style="font-family: monospace; margin-top: 1.8rem;">
+                    {{ $id }}
+                </p>
             </div>
             <p class="dot dot-1"></p>
         </div>
     </div>
     <div>
-        <p class="inv-title">INVOICE APP</p>
+        <p class="inv-title" style="font-family: monospace; text-transform: capitalize">{{$description}}</p>
         <div class="bill">
-            <p class="bill-to">BILLING TO:</p>
+            <p class="bill-to" style="font-family: monospace">BILLING TO:</p>
             <p>{{ $name }}</p>
             <p>{{ $clientStreet }}</p>
             <p>{{ $clientCity }}</p>
@@ -39,24 +40,29 @@
     </table>
     <!-- </div> -->
     <div class="total">Grand Total: {{ $total }}</div>
-    <div class="footer">
+    {{-- <div class="footer">
         <div class="terms">
             <p class="dot dot-2"></p>
-            <p>Terms</p>
+            <p style="width: 60%; position: absolute; left: 3rem; bottom: 7rem;">
+                <span style="font-weight: 600; font-family: monospace; ">TERMS & CONDITIONS:</span>
+                <br>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit eligendi magni quod animi ducimus!
+            </p>
         </div>
-        <footer></footer>
-    </div>
+        <footer>@socialmedia</footer>
+    </div> --}}
 </div>
 <style>
     /* .main {
         padding: 2rem;
     } */
     .header {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: monospace;
         border: solid;
         position: relative;
         padding-top: 1rem;
-        height: 90vh;
+        padding-bottom: 5rem;
+        height: 100vh;
         width: 100%;
     }
 
@@ -69,8 +75,7 @@
         background-color: black;
         font-weight: 600;
         letter-spacing: 0.5rem;
-        font-family: Arial, Helvetica, sans-serif;
-
+        font-family: monospace;
     }
 
     .inv-id {
@@ -94,7 +99,7 @@
     .dot-1 {
         position: absolute;
         right: -3rem;
-        top: 1rem;
+        top: .5rem;
     }
     .inv-title {
         padding: 0.3rem 0;
@@ -108,28 +113,47 @@
         padding-left: 3rem;
     }
     .bill-to {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: monospace;
         font-weight: 600;
     }
 
     table {
         width: 100%;
-        margin-top: 1rem
+        margin-top: 1rem;
     }
 
-    thead {
-        background-color: black;
-        color: white;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-
-    .td {
+    th,
+    td {
+        padding: 15px;
+        color: #fff;
+    }
+    td {
         text-align: center;
+        color: black;
         border-bottom: 1px solid black;
+    }
+    th {
+        text-align: center;
+        font-size: large;
+    }
+    thead th {
+        background-color: #000000;
+    }
+
+    tbody td {
+        position: relative;
     }
 
     .total {
         float: right;
-        margin-top: 1rem;
+        margin-top: 3rem;
+        margin-right: 3.5rem;
     }
 
     .terms {
@@ -143,13 +167,4 @@
         margin-right: 1rem;
     }
 
-    .footer {
-        margin-top: 19.8rem;
-    }
-
-    footer {
-        background-color: black;
-        color: white;
-        padding: 2rem 2.5rem;
-    }
 </style>
