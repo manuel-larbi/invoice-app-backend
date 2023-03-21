@@ -31,26 +31,15 @@
             @foreach ($items as $item)
             <tr class="border-b border-black">
                 <td class="td">{{ $item->name}}</td>
-                <td class="td">{{ $item->price }}</td>
+                <td class="td">${{ number_format(($item->price),2,'.','') }}</td>
                 <td class="td">{{ $item->quantity}}</td>
-                <td class="td">{{ $item->total}}</td>
+                <td class="td">${{ number_format(($item->total),2,'.','')}}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
     <!-- </div> -->
-    <div class="total">Grand Total: {{ $total }}</div>
-    {{-- <div class="footer">
-        <div class="terms">
-            <p class="dot dot-2"></p>
-            <p style="width: 60%; position: absolute; left: 3rem; bottom: 7rem;">
-                <span style="font-weight: 600; font-family: monospace; ">TERMS & CONDITIONS:</span>
-                <br>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit eligendi magni quod animi ducimus!
-            </p>
-        </div>
-        <footer>@socialmedia</footer>
-    </div> --}}
+    <div class="total">Grand Total: ${{ $total }}</div>
 </div>
 <style>
     /* .main {
