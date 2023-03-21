@@ -92,7 +92,7 @@ class InvoiceController extends Controller
             $request->except(['items', 'invoiceId',])
         );
 
-        $invoice = Invoice::where('invoiceId', $invoiceId)->first();
+        $invoice = Invoice::firstWhere('invoiceId', $invoiceId);
 
         $invoice->items()->delete();
 
