@@ -21,8 +21,8 @@ class EmailController extends Controller
         $data['clientCountry'] = $invoiceDetails->clientCountry;
         $data['clientPostCode'] = $invoiceDetails->clientPostCode;
         $data['items'] = $invoiceDetails->items;
-        $data['total'] = $invoiceDetails->total;
-
+        $data['total'] = number_format(($invoiceDetails->total),2,'.','');
+        // dd($data['items']);
         $pdf = PDF::loadView('testPDF', $data);
 
         if ($invoiceDetails->status == 'paid') {
