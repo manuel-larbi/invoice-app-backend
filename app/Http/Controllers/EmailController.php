@@ -16,10 +16,6 @@ class EmailController extends Controller
         $data['description'] = $invoiceDetails->description;
         $data['name'] = $invoiceDetails->clientName;
         $data['status'] = $invoiceDetails->status;
-        // $data['senderStreet'] = $invoiceDetails->senderStreet;
-        // $data['senderCity'] = $invoiceDetails->senderCity;
-        // $data['senderCountry'] = $invoiceDetails->senderCountry;
-        // $data['senderPostCode'] = $invoiceDetails->senderPostCode;
         $data['clientStreet'] = $invoiceDetails->clientStreet;
         $data['clientCity'] = $invoiceDetails->clientCity;
         $data['clientCountry'] = $invoiceDetails->clientCountry;
